@@ -1,16 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getAlerts, createAlert } from '@/lib/db';
 
-export async function GET() {
-  const alerts = getAlerts();
-  return NextResponse.json(alerts);
-}
+    const alert = createAlert(
+      message ?? "Emergency Alert",
+      location ?? null
+    );
 
-export async function POST(req: NextRequest) {
-  const body = await req.json().catch(() => ({}));
-  const { message, location } = body;
-
-  const id = createAlert(message ?? null, location ?? null);
-
-  return NextResponse.json({ id });
+    return NextResponse.json({ 
+      success: true, 
+      alert 
+    });
+  } catch (error) {
+    console.error('Error creating alert:', error);
+    return NextResponse.json({ 
+      success: false, 
+      error: 'Failed to create alert' 
+    }, { status: 500 });
+  }
 }
