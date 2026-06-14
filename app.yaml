@@ -8,5 +8,5 @@ services:
     instance_count: 1
     instance_size_slug: basic-xxs
     git:
-      repo_clone_url: https://github.com/digitalocean/sample-nodejs.git
+      repo_clone_url: https://github.com/MattQuade/personal-safety.git
       branch: main

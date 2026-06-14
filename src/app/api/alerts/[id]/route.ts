@@ -1,28 +1,14 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { acknowledgeAlert, cancelAlert } from '@/lib/db';
+import { NextResponse } from "next/server";
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+type RouteParams = {
+  params: Promise<{ id: string }>;
+};
+
+export async function GET(request: Request, { params }: RouteParams) {
   try {
-    const { action } = await request.json();
-    const id = parseInt(params.id);
-
-    if (action === 'acknowledge') {
-      acknowledgeAlert(id);
-    } else if (action === 'cancel') {
-      cancelAlert(id);
-    } else {
-      return NextResponse.json({ success: false, error: 'Invalid action' }, { status: 400 });
-    }
-
-    return NextResponse.json({ success: true });
+    const { id } = await params;
+    return NextResponse.json({ id, status: "alert_fetched" });
   } catch (error) {
-    console.error('Error updating alert:', error);
-    return NextResponse.json({ 
-      success: false, 
-      error: 'Failed to update alert' 
-    }, { status: 500 });
+    return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }
