@@ -1,0 +1,12 @@
+name: personal-safety
+domains:
+  - domain: alert.ozintel.com.au
+    type: PRIMARY
+services:
+  - name: web
+    environment_slug: node-js
+    instance_count: 1
+    instance_size_slug: basic-xxs
+    git:
+      repo_clone_url: https://github.com/digitalocean/sample-nodejs.git
+      branch: main

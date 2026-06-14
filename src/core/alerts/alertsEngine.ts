@@ -1,5 +1,3 @@
-// src/core/alerts/alertsEngine.ts
-
 export type AlertStatus = "pending" | "sent" | "delivered" | "acknowledged";
 
 export interface ActiveAlert {
@@ -18,9 +16,6 @@ export interface ActiveAlert {
 
 let activeAlert: ActiveAlert | null = null;
 
-/**
- * Create a new alert
- */
 export function createAlert(sender: string, receiver: string, message: string): ActiveAlert {
   activeAlert = {
     id: crypto.randomUUID(),
@@ -34,36 +29,18 @@ export function createAlert(sender: string, receiver: string, message: string): 
   return activeAlert;
 }
 
-/**
- * Mark alert as sent (after SMS API success)
- */
 export function markAlertSent() {
-  if (activeAlert) {
-    activeAlert.status = "sent";
-  }
+  if (activeAlert) activeAlert.status = "sent";
 }
 
-/**
- * Mark alert as delivered (optional, if MessageMedia delivery receipts are added later)
- */
 export function markAlertDelivered() {
-  if (activeAlert) {
-    activeAlert.status = "delivered";
-  }
+  if (activeAlert) activeAlert.status = "delivered";
 }
 
-/**
- * Mark alert as acknowledged by receiver
- */
 export function acknowledgeAlert() {
-  if (activeAlert) {
-    activeAlert.status = "acknowledged";
-  }
+  if (activeAlert) activeAlert.status = "acknowledged";
 }
 
-/**
- * Update last known location
- */
 export function updateLocation(lat: number, lng: number) {
   if (activeAlert) {
     activeAlert.lastKnownLocation = {
@@ -74,9 +51,10 @@ export function updateLocation(lat: number, lng: number) {
   }
 }
 
-/**
- * Get the current active alert
- */
 export function getActiveAlert(): ActiveAlert | null {
   return activeAlert;
+}
+
+export function clearActiveAlert() {
+  activeAlert = null;
 }
