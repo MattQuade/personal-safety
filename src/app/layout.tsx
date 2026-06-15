@@ -1,39 +1,19 @@
-import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
+import "./globals.css"
+import { Inter } from "next/font/google"
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
+const inter = Inter({ subsets: ["latin"] })
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export const metadata = {
+  title: "Personal Safety",
+  description: "Safety alert system",
+}
 
-export const metadata: Metadata = {
-  title: "Personal Safety Alert",
-  description: "Personal Alert & Location System",
-  icons: {
-    icon: "/favicon.ico",
-  },
-};
-
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col bg-black text-white">
+    <html lang="en">
+      <body className={inter.className}>
         {children}
       </body>
     </html>
-  );
+  )
 }
