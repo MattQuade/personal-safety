@@ -1,8 +1,7 @@
 {
   "name": "personal-safety",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "private": true,
-  "forceRebuild": "1",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
