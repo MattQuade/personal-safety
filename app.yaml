@@ -1,12 +1,25 @@
 name: personal-safety
-domains:
-  - domain: alert.ozintel.com.au
-    type: PRIMARY
+region: syd
 services:
-  - name: web
-    environment_slug: node-js
+  - environment_slug: node-js
+    github:
+      branch: main
+      deploy_on_push: true
+      repo: MattQuade/personal-safety
+    http_port: 3000
     instance_count: 1
     instance_size_slug: basic-xxs
-    git:
-      repo_clone_url: https://github.com/MattQuade/personal-safety.git
-      branch: main
+    name: personal-safety
+    routes:
+      - path: /
+    run_command: npm start
+    build_command: npx prisma generate && npm run build
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        value: ${safety-db.DATABASE_URL}
+databases:
+  - engine: PG
+    name: safety-db
+    version: "16"
+    production: false
