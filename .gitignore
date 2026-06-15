@@ -42,3 +42,8 @@ next-env.d.ts
 
 .vercel
 .env*
+
+doctl.exe
+spec.yaml
+app.yaml
+
