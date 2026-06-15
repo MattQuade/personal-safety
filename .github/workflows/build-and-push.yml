@@ -1,0 +1,21 @@
+name: Build and Push
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build
+        run: |
+          npm install
+          npm run build
+      - name: Login to DigitalOcean
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITAL_ACCESS_TOKEN }}
+      - name: Push to Registry
+        run: |
+          doctl registry login
+          docker build -t personal-safety .
+          docker tag personal-safety registry.digitalocean.com/your-registry/personal-safety:latest
+          docker push registry.digitalocean.com/your-registry/personal-safety:latest

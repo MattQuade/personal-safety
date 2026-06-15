@@ -1,0 +1,18 @@
+Folder PATH listing for volume Backup
+Volume serial number is 702A-A2F5
+D:\PERSONAL-SAFETY\SRC\APP
+¦   favicon.ico
+¦   globals.css
+¦   layout.tsx
+¦   page.tsx
+¦   
++---api
+    +---alerts
+    ¦   ¦   route.ts
+    ¦   ¦   
+    ¦   +---[id]
+    ¦           route.ts
+    ¦           
+    +---sms
+            route.ts
+            
