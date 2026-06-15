@@ -10,8 +10,9 @@ services:
   instance_size_slug: basic-xxs
   instance_count: 1
   http_port: 8080
+  # We force only the essential commands and bypass any auto-detected prisma logic
+  build_command: npm install && npm run build
   run_command: npm start
-  build_command: npm run build
   envs:
   - key: DATABASE_URL
     scope: RUN_TIME
