@@ -1,12 +1,10 @@
 import { NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
-// Provide a dummy database URL fallback to allow Next.js to compile this file during build time
-const prisma = new PrismaClient({
-  datasource: {
-    url: process.env.DATABASE_URL || "postgresql://dummy:dummy@localhost:5432/dummy"
-  }
-});
+// This forces Next.js to skip pre-rendering/evaluating this route at build time!
+export const dynamic = "force-dynamic";
+
+const prisma = new PrismaClient();
 
 export async function POST(request: Request) {
   try {
