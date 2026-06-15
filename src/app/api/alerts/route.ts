@@ -3,11 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 // Provide a dummy database URL fallback to allow Next.js to compile this file during build time
 const prisma = new PrismaClient({
-  datasources: {
-    db: {
-      url: process.env.DATABASE_URL || "postgresql://dummy:dummy@localhost:5432/dummy"
-    }
-  }
+  datasourceUrl: process.env.DATABASE_URL || "postgresql://dummy:dummy@localhost:5432/dummy"
 });
 
 export async function POST(request: Request) {
