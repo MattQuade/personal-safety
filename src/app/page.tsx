@@ -12,14 +12,14 @@ export default function HomePage() {
         <div className="space-y-4">
           <Link 
             href="/auth"
-            className="block w-full bg-blue-600 text-white py-5 rounded-2xl text-xl font-medium"
+            className="block w-full bg-blue-600 text-white py-5 rounded-2xl text-xl font-medium hover:bg-blue-700"
           >
             Login / Register
           </Link>
 
           <Link 
             href="/settings"
-            className="block w-full bg-gray-800 text-white py-5 rounded-2xl text-xl font-medium"
+            className="block w-full bg-gray-800 text-white py-5 rounded-2xl text-xl font-medium hover:bg-gray-900"
           >
             Go to Settings
           </Link>
