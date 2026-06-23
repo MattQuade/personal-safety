@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabase";
+import { useRouter } from "next/navigation";
 
 type Contact = {
   id?: string;
@@ -17,30 +18,39 @@ export default function SettingsPage() {
   const [newEmergencyName, setNewEmergencyName] = useState("");
   const [newEmergencyPhone, setNewEmergencyPhone] = useState("");
   const [status, setStatus] = useState("");
+  const [user, setUser] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
-  // Load contacts from Supabase
+  // Check auth and load contacts
   useEffect(() => {
-    loadContacts();
+    const checkUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        router.push("/auth");
+        return;
+      }
+      setUser(user);
+      loadContacts(user.id);
+    };
+
+    checkUser();
   }, []);
 
-  const loadContacts = async () => {
-    // For now using a simple user ID. Later we'll add real auth.
-    const userId = "default-user";
-
+  const loadContacts = async (userId: string) => {
     const { data: safe } = await supabase
       .from('contacts')
       .select('*')
-      .eq('type', 'safe')
       .eq('user_id', userId)
-      .order('created_at');
+      .eq('type', 'safe')
+      .order('created_at', { ascending: true });
 
     const { data: emergency } = await supabase
       .from('contacts')
       .select('*')
-      .eq('type', 'emergency')
       .eq('user_id', userId)
-      .order('created_at');
+      .eq('type', 'emergency')
+      .order('created_at', { ascending: true });
 
     setSafeContacts(safe || []);
     setEmergencyContacts(emergency || []);
@@ -48,11 +58,13 @@ export default function SettingsPage() {
   };
 
   const saveContact = async (type: 'safe' | 'emergency', name: string, phone: string) => {
-    const userId = "default-user";
+    if (!user) return;
 
-    await supabase
+    const { error } = await supabase
       .from('contacts')
-      .insert([{ user_id: userId, type, name, phone }]);
+      .insert([{ user_id: user.id, type, name, phone }]);
+
+    if (error) console.error(error);
   };
 
   const deleteContact = async (id: string) => {
@@ -64,7 +76,7 @@ export default function SettingsPage() {
     await saveContact('safe', newSafeName.trim(), newSafePhone.trim());
     setNewSafeName("");
     setNewSafePhone("");
-    loadContacts(); // refresh
+    loadContacts(user.id);
   };
 
   const addEmergency = async () => {
@@ -72,22 +84,27 @@ export default function SettingsPage() {
     await saveContact('emergency', newEmergencyName.trim(), newEmergencyPhone.trim());
     setNewEmergencyName("");
     setNewEmergencyPhone("");
-    loadContacts();
+    loadContacts(user.id);
   };
 
   const removeSafe = async (id: string) => {
     await deleteContact(id);
-    loadContacts();
+    loadContacts(user.id);
   };
 
   const removeEmergency = async (id: string) => {
     await deleteContact(id);
-    loadContacts();
+    loadContacts(user.id);
   };
+
+  if (loading) return <div className="p-8 text-center">Loading...</div>;
 
   return (
     <div className="max-w-2xl mx-auto p-6 space-y-12">
-      <h1 className="text-4xl font-bold text-center">Settings</h1>
+      <div className="flex justify-between items-center">
+        <h1 className="text-4xl font-bold">Settings</h1>
+        <button onClick={() => supabase.auth.signOut()} className="text-red-600">Sign Out</button>
+      </div>
 
       {/* SAFE Contacts */}
       <div className="border rounded-3xl p-8 bg-white shadow">
@@ -122,10 +139,6 @@ export default function SettingsPage() {
           </div>
         ))}
       </div>
-
-      <p className="text-center text-green-600 font-medium">Contacts are now saved in the cloud</p>
     </div>
   );
 }
-
-
