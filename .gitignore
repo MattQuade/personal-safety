@@ -47,3 +47,4 @@ doctl.exe
 spec.yaml
 app.yaml
 
+".env.local" 
